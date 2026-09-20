@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phần Mềm Tính Uốn Vòm Nhôm - BPWindow</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+    .font-condensed {
+      font-family: 'Roboto Condensed', sans-serif;
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printArea, #printArea * {
+        visibility: visible;
+      }
+      #printArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        color: black !important;
+        padding: 15px 25px;
+        display: block !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+
+  <!-- HEADER BRAND -->
+  <header class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-b border-amber-500/40 shadow-xl sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-lg bg-amber-500 flex items-center justify-center font-bold text-slate-950 text-2xl shadow-lg shadow-amber-500/20 font-condensed">
+          BP
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-black tracking-wider text-amber-400 font-condensed uppercase">
+            BPWindow <span class="text-slate-400 font-light">|</span> VIỆT NHÔM BP
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-400 font-medium">Hệ Thống Tính Toán & Ra Phôi Uốn Vòm Cửa Nhôm</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="tel:0942799393" class="flex items-center gap-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/40 px-3.5 py-1.5 rounded-full text-sm font-semibold transition-all">
+          <i class="fa-solid fa-phone-volume text-amber-400 animate-pulse"></i>
+          <span>Hotline: <strong class="tracking-wide">0942 799 393</strong></span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <main class="max-w-6xl mx-auto px-4 py-6 w-full flex-grow">
+
+    <!-- THÔNG TIN DỰ ÁN & CÔNG TRÌNH -->
+    <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 sm:p-5 shadow-lg mb-6">
+      <div class="flex items-center gap-2 mb-3 border-b border-slate-700/60 pb-2">
+        <i class="fa-solid fa-folder-open text-amber-400"></i>
+        <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-300">
+          Thông tin công trình / Dự án gia công
+        </h3>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Tên công trình / Khách hàng:</label>
+          <input type="text" id="proj_customer" placeholder="Ví dụ: Biệt thự Anh Hoàng - Đồng Nai"
+            class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400 transition">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Vị trí cửa / Mã cửa:</label>
+          <input type="text" id="proj_door" placeholder="Ví dụ: Cửa đi vòm mặt tiền (D1)"
+            class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400 transition">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Hệ nhôm / Màu nhôm:</label>
+          <input type="text" id="proj_profile" placeholder="Ví dụ: Xingfa hệ 55 - Vân gỗ"
+            class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400 transition">
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE SWITCHER BUTTONS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-2xl mx-auto mb-6">
+      <button id="btnMod1" onclick="switchTab(1)" class="flex items-center justify-center gap-2.5 py-3.5 px-5 rounded-xl font-bold uppercase tracking-wider text-sm transition-all border-2 shadow-lg bg-amber-500 text-slate-950 border-amber-400 shadow-amber-500/20">
+        <i class="fa-solid fa-shapes text-lg"></i>
+        <span>1. Uốn Vòm Cong (Đều / Bán Nguyệt)</span>
+      </button>
+      <button id="btnMod2" onclick="switchTab(2)" class="flex items-center justify-center gap-2.5 py-3.5 px-5 rounded-xl font-bold uppercase tracking-wider text-sm transition-all border-2 shadow-lg bg-slate-800/80 text-slate-300 border-slate-700 hover:border-slate-500 hover:text-white">
+        <i class="fa-solid fa-vector-square text-lg"></i>
+        <span>2. Vòm Bo 2 Vai + Đoạn Thẳng</span>
+      </button>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODULE 1: UỐN VÒM CONG (HỖ TRỢ VÒM + 2 CHÂN THẲNG) -->
+    <!-- ======================================================== -->
+    <div id="module1" class="space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Cột nhập thông số -->
+        <div class="lg:col-span-5 bg-slate-800/90 border border-slate-700 rounded-2xl p-5 sm:p-6 shadow-xl space-y-4">
+          <div class="border-b border-slate-700 pb-3 flex items-center justify-between">
+            <h3 class="font-bold text-lg text-amber-400 uppercase font-condensed flex items-center gap-2">
+              <i class="fa-solid fa-pen-ruler"></i> Nhập kích thước vòm cong
+            </h3>
+            <span id="m1_mode_tag" class="text-xs bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Cung tròn R</span>
+          </div>
+
+          <!-- Alert Lỗi -->
+          <div id="err1" class="hidden bg-rose-500/20 border border-rose-500/60 text-rose-300 text-xs sm:text-sm p-3 rounded-lg flex items-start gap-2">
+            <i class="fa-solid fa-circle-exclamation mt-0.5 text-rose-400"></i>
+            <span id="err1-msg">Dữ liệu không hợp lệ!</span>
+          </div>
+
+          <div>
+            <label class="block text-xs uppercase font-semibold text-slate-300 mb-1.5">Chiều rộng dây cung AB (L):</label>
+            <div class="relative">
+              <input type="number" id="m1_L" placeholder="Ví dụ: 2000" step="any"
+                class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3.5 py-2.5 text-white font-semibold text-lg focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition pr-14">
+              <span class="absolute right-3.5 top-3 text-xs text-slate-400 font-bold uppercase">mm</span>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs uppercase font-semibold text-slate-300 mb-1.5">Tổng chiều cao cung vòm (H):</label>
+            <div class="relative">
+              <input type="number" id="m1_H" placeholder="Ví dụ: 1500" step="any"
+                class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3.5 py-2.5 text-white font-semibold text-lg focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition pr-14">
+              <span class="absolute right-3.5 top-3 text-xs text-slate-400 font-bold uppercase">mm</span>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">
+              * Nếu <strong>H &le; L/2</strong>: Tính uốn cung tròn đều.<br>
+              * Nếu <strong>H &gt; L/2</strong>: Tự động uốn vòm bán nguyệt (R = L/2) + phần cao dư (H - R) là <strong>2 đoạn chân thẳng đứng</strong>.
+            </p>
+          </div>
+
+          <div>
+            <label class="block text-xs uppercase font-semibold text-slate-300 mb-1.5">Phần bù phôi nhôm dư kẹp máy uốn:</label>
+            <div class="relative">
+              <input type="number" id="m1_extra" value="300" step="any"
+                class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3.5 py-2 text-white font-semibold text-base focus:outline-none focus:border-amber-400 transition pr-14">
+              <span class="absolute right-3.5 top-2.5 text-xs text-slate-400 font-bold uppercase">mm</span>
+            </div>
+          </div>
+
+          <!-- Buttons Action -->
+          <div class="grid grid-cols-2 gap-3 pt-2">
+            <button onclick="calcModule1()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 uppercase text-sm">
+              <i class="fa-solid fa-calculator"></i> Tính Toán
+            </button>
+            <button onclick="resetModule1()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 uppercase text-sm">
+              <i class="fa-solid fa-arrow-rotate-left"></i> Nhập Lại
+            </button>
+          </div>
+        </div>
+
+        <!-- Cột kết quả & bản vẽ -->
+        <div class="lg:col-span-7 space-y-5">
+          <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-5 shadow-xl">
+            <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4 border-b border-slate-700 pb-2 flex items-center justify-between">
+              <span class="text-amber-400"><i class="fa-solid fa-square-poll-vertical"></i> Kết Quả Cơ Khí</span>
+              <span id="m1_status_badge" class="text-xs text-emerald-400 font-semibold">Sẵn sàng</span>
+            </h4>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+              <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/80">
+                <span class="text-[10px] text-slate-400 uppercase block font-medium">Bán kính uốn (R)</span>
+                <span id="m1_res_R" class="text-lg sm:text-xl font-bold text-amber-400 font-condensed">---</span>
+                <span class="text-[10px] text-slate-500">mm</span>
+              </div>
+
+              <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/80">
+                <span class="text-[10px] text-slate-400 uppercase block font-medium">Chiều dài cung (S)</span>
+                <span id="m1_res_S" class="text-lg sm:text-xl font-bold text-emerald-400 font-condensed">---</span>
+                <span class="text-[10px] text-slate-500">mm</span>
+              </div>
+
+              <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/80">
+                <span class="text-[10px] text-slate-400 uppercase block font-medium">Đoạn Chân Thẳng</span>
+                <span id="m1_res_chan" class="text-lg sm:text-xl font-bold text-sky-400 font-condensed">0</span>
+                <span class="text-[10px] text-slate-500">H - R (mm)</span>
+              </div>
+
+              <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/80">
+                <span class="text-[10px] text-slate-400 uppercase block font-medium">Góc Ôm (&theta;)</span>
+                <span id="m1_res_deg" class="text-lg sm:text-xl font-bold text-violet-400 font-condensed">---</span>
+                <span class="text-[10px] text-slate-500">độ (&deg;)</span>
+              </div>
+            </div>
+
+            <!-- Khối phôi cắt nổi bật -->
+            <div class="mt-4 bg-gradient-to-r from-amber-500/20 via-amber-500/10 to-transparent border border-amber-500/40 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div>
+                <span class="text-xs uppercase text-amber-300 font-bold tracking-wider block">Chiều Dài Phôi Cần Cắt:</span>
+                <span id="m1_phoi_desc" class="text-[11px] text-slate-400">Bằng Cung S + Bù kẹp phôi</span>
+              </div>
+              <div class="text-right">
+                <span id="m1_res_phoi" class="text-3xl font-black text-amber-400 font-condensed tracking-tight">---</span>
+                <span class="text-sm font-bold text-amber-400"> mm</span>
+              </div>
+            </div>
+
+            <!-- Hướng dẫn vạch dấu cho thợ -->
+            <div id="m1_guide_box" class="mt-3.5 p-3 bg-slate-900/90 rounded-xl border border-dashed border-slate-700 text-xs space-y-1 text-slate-300">
+              <span class="font-bold text-amber-400 uppercase block flex items-center gap-1.5">
+                <i class="fa-solid fa-ruler-combined"></i> Mốc kích thước vạch bút lông cho thợ uốn:
+              </span>
+              <p id="m1_guide_text">Bấm <strong>TÍNH TOÁN</strong> để hiển thị quy cách ra phôi.</p>
+            </div>
+
+            <!-- Các nút sao chép, in -->
+            <div class="flex flex-wrap items-center justify-end gap-2.5 mt-4 pt-3 border-t border-slate-700/60">
+              <button onclick="copyResult(1)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold py-2 px-3.5 rounded-lg flex items-center gap-1.5 transition">
+                <i class="fa-regular fa-copy text-amber-400"></i> Sao Chép Zalo
+              </button>
+              <button onclick="printBill(1)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold py-2 px-3.5 rounded-lg flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-print text-sky-400"></i> In Phiếu / Lưu PDF
+              </button>
+            </div>
+          </div>
+
+          <!-- Bản vẽ hình học SVG -->
+          <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-4 shadow-xl">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wide block mb-2 flex items-center justify-between">
+              <span><i class="fa-solid fa-draw-polygon text-amber-400"></i> Bản vẽ kỹ thuật vòm cong (Chuẩn tỷ lệ thực):</span>
+              <span class="text-[11px] text-amber-400 font-normal">CAD tỷ lệ chuẩn</span>
+            </span>
+            <div class="w-full bg-slate-950 rounded-xl p-3 border border-slate-800 flex items-center justify-center min-h-[260px] overflow-hidden">
+              <svg id="svg1" class="w-full h-64" viewBox="0 0 540 280"></svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODULE 2: VÒM BO 2 VAI + ĐOẠN THẲNG Ở GIỮA -->
+    <!-- ======================================================== -->
+    <div id="module2" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Cột nhập thông số -->
+        <div class="lg:col-span-5 bg-slate-800/90 border border-slate-700 rounded-2xl p-5 sm:p-6 shadow-xl space-y-4">
+          <div class="border-b border-slate-700 pb-3 flex items-center justify-between">
+            <h3 class="font-bold text-lg text-amber-400 uppercase font-condensed flex items-center gap-2">
+              <i class="fa-solid fa-pen-ruler"></i> Thông số vòm 2 vai lượn
+            </h3>
+            <span class="text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded border border-amber-500/40">2 góc cong 90&deg;</span>
+          </div>
+
+          <div id="err2" class="hidden bg-rose-500/20 border border-rose-500/60 text-rose-300 text-xs sm:text-sm p-3 rounded-lg flex items-start gap-2">
+            <i class="fa-solid fa-circle-exclamation mt-0.5 text-rose-400"></i>
+            <span id="err2-msg">Dữ liệu không hợp lệ!</span>
+          </div>
+
+          <div>
+            <label class="block text-xs uppercase font-semibold text-slate-300 mb-1.5">1. Tổng chiều rộng khung cửa (W):</label>
+            <div class="relative">
+              <input type="number" id="m2_W" placeholder="Ví dụ: 2400" step="any"
+                class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3.5 py-2.5 text-white font-semibold text-lg focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition pr-14">
+              <span class="absolute right-3.5 top-3 text-xs text-slate-400 font-bold uppercase">mm</span>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">Phủ bì chiều rộng toàn bộ ô cửa.</p>
+          </div>
+
+          <div>
+            <label class="block text-xs uppercase font-semibold text-slate-300 mb-1.5">2. Bán kính uốn bo góc vai (R):</label>
+            <div class="relative">
+              <input type="number" id="m2_R" placeholder="Ví dụ: 400" step="any"
+                class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3.5 py-2.5 text-white font-semibold text-lg focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition pr-14">
+              <span class="absolute right-3.5 top-3 text-xs text-slate-400 font-bold uppercase">mm</span>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">Bán kính khuôn uốn vai lượn 90&deg;. Điều kiện: 2 &times; R &le; W.</p>
+          </div>
+
+          <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/70 space-y-1.5">
+            <label class="block text-xs uppercase font-bold text-amber-400">
+              3. Chiều cao tính từ đỉnh vòm cây ngang (H):
+            </label>
+            <div class="relative">
+              <input type="number" id="m2_H_tong" placeholder="Ví dụ: 2600 (hoặc bằng R nếu chỉ uốn vòm)" step="any"
+                class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3.5 py-2.5 text-white font-semibold text-lg focus:outline-none focus:border-amber-400 transition pr-14">
+              <span class="absolute right-3.5 top-3 text-xs text-slate-400 font-bold uppercase">mm</span>
+            </div>
+            <p class="text-[11px] text-slate-300 leading-snug">
+              &bull; <strong>Uốn liền 3 cạnh:</strong> Nhập từ nền lên đến mép đỉnh trên cùng.<br>
+              &bull; <strong>Chỉ uốn vòm ngang trên:</strong> Nhập bằng đúng bán kính <strong>R</strong> (chân = 0).
+            </p>
+          </div>
+
+          <div>
+            <label class="block text-xs uppercase font-semibold text-slate-300 mb-1.5">Phần bù phôi nhôm dư kẹp máy uốn:</label>
+            <div class="relative">
+              <input type="number" id="m2_extra" value="300" step="any"
+                class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3.5 py-2 text-white font-semibold text-base focus:outline-none focus:border-amber-400 transition pr-14">
+              <span class="absolute right-3.5 top-2.5 text-xs text-slate-400 font-bold uppercase">mm</span>
+            </div>
+          </div>
+
+          <!-- Buttons Action -->
+          <div class="grid grid-cols-2 gap-3 pt-2">
+            <button onclick="calcModule2()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 uppercase text-sm">
+              <i class="fa-solid fa-calculator"></i> Tính Toán
+            </button>
+            <button onclick="resetModule2()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 uppercase text-sm">
+              <i class="fa-solid fa-arrow-rotate-left"></i> Nhập Lại
+            </button>
+          </div>
+        </div>
+
+        <!-- Cột kết quả & bản vẽ -->
+        <div class="lg:col-span-7 space-y-5">
+          <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-5 shadow-xl">
+            <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4 border-b border-slate-700 pb-2 flex items-center justify-between">
+              <span class="text-amber-400"><i class="fa-solid fa-square-poll-vertical"></i> Chi Tiết Kết Cấu Vòm Vai Cửa</span>
+              <span class="text-xs text-slate-400 font-normal">Chính xác đến 1 mm</span>
+            </h4>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+              <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/80">
+                <span class="text-[10px] text-slate-400 uppercase block font-medium">Đoạn Thẳng Đỉnh (C)</span>
+                <span id="m2_res_C" class="text-lg sm:text-xl font-bold text-amber-400 font-condensed">---</span>
+                <span class="text-[10px] text-slate-500 block">W - 2R (mm)</span>
+              </div>
+
+              <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/80">
+                <span class="text-[10px] text-slate-400 uppercase block font-medium">1 Góc Bo Cong</span>
+                <span id="m2_res_S1" class="text-lg sm:text-xl font-bold text-emerald-400 font-condensed">---</span>
+                <span class="text-[10px] text-slate-500 block">Cung 90&deg; (mm)</span>
+              </div>
+
+              <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/80">
+                <span class="text-[10px] text-slate-400 uppercase block font-medium">Đoạn Chân Thẳng</span>
+                <span id="m2_res_chan" class="text-lg sm:text-xl font-bold text-sky-400 font-condensed">---</span>
+                <span class="text-[10px] text-slate-500 block">H - R (mm)</span>
+              </div>
+
+              <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/80">
+                <span class="text-[10px] text-slate-400 uppercase block font-medium">Tổng Dài Định Hình</span>
+                <span id="m2_res_Stong" class="text-lg sm:text-xl font-bold text-violet-400 font-condensed">---</span>
+                <span class="text-[10px] text-slate-500 block">Chưa phôi dư (mm)</span>
+              </div>
+            </div>
+
+            <!-- Khối phôi cắt nổi bật -->
+            <div class="mt-4 bg-gradient-to-r from-amber-500/20 via-amber-500/10 to-transparent border border-amber-500/40 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div>
+                <span class="text-xs uppercase text-amber-300 font-bold tracking-wider block">Tổng Chiều Dài Cắt Phôi:</span>
+                <span class="text-[11px] text-slate-400">Bao gồm chiều dài định hình + bù kẹp máy uốn</span>
+              </div>
+              <div class="text-right">
+                <span id="m2_res_phoi" class="text-3xl font-black text-amber-400 font-condensed tracking-tight">---</span>
+                <span class="text-sm font-bold text-amber-400"> mm</span>
+              </div>
+            </div>
+
+            <!-- Hướng dẫn vạch dấu thợ uốn -->
+            <div id="m2_guide_box" class="mt-4 p-3 bg-slate-900/90 rounded-xl border border-dashed border-amber-500/50 text-xs space-y-1 text-slate-300">
+              <span class="font-bold text-amber-400 uppercase block flex items-center gap-1.5">
+                <i class="fa-solid fa-ruler-combined"></i> Mốc kích thước vạch bút lông gia công trên phôi nhôm:
+              </span>
+              <p id="m2_guide_text">Vui lòng bấm <strong>TÍNH TOÁN</strong> để hiển thị khoảng cách gạch dấu cho thợ xưởng.</p>
+            </div>
+
+            <!-- Các nút sao chép, in -->
+            <div class="flex flex-wrap items-center justify-end gap-2.5 mt-4 pt-3 border-t border-slate-700/60">
+              <button onclick="copyResult(2)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold py-2 px-3.5 rounded-lg flex items-center gap-1.5 transition">
+                <i class="fa-regular fa-copy text-amber-400"></i> Sao Chép Zalo
+              </button>
+              <button onclick="printBill(2)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold py-2 px-3.5 rounded-lg flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-print text-sky-400"></i> In Phiếu / Lưu PDF
+              </button>
+            </div>
+          </div>
+
+          <!-- Bản vẽ hình học SVG -->
+          <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-4 shadow-xl">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wide block mb-2">
+              <i class="fa-solid fa-door-open text-amber-400"></i> Mô phỏng dáng cửa vòm bo 2 vai thực tế:
+            </span>
+            <div class="w-full bg-slate-950 rounded-xl p-2 border border-slate-800 flex items-center justify-center min-h-[250px] overflow-hidden">
+              <svg id="svg2" class="w-full h-64" viewBox="0 0 500 300"></svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- GHI CHÚ XƯỞNG SẢN XUẤT -->
+    <div class="mt-8 bg-slate-800/40 border border-slate-700/60 rounded-xl p-4 text-xs text-slate-400 flex items-start gap-3">
+      <i class="fa-solid fa-circle-info text-amber-400 text-base mt-0.5"></i>
+      <p>
+        <strong class="text-slate-300">Lưu ý gia công tại xưởng:</strong> Chiều dài phôi mặc định đã cộng thêm 300 mm để kẹp con lăn máy uốn. Thợ xưởng có thể tăng hoặc giảm thông số bù phôi tùy thuộc vào dòng máy uốn cụ thể của đơn vị sản xuất.
+      </p>
+    </div>
+  </main>
+
+  <!-- FOOTER BRAND -->
+  <footer class="bg-slate-950 border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>
+        <strong class="text-slate-400">BPWindow - VIỆT NHÔM BP</strong> | Hotline: <a href="tel:0942799393" class="text-amber-400 font-bold hover:underline">0942 799 393</a>
+      </div>
+      <div>Ứng dụng kỹ thuật hỗ trợ sản xuất cửa nhôm uốn vòm</div>
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- MẪU IN PHIẾU GIA CÔNG XƯỞNG KÈM HÌNH ẢNH MINH HỌA -->
+  <!-- ======================================================== -->
+  <div id="printArea" class="hidden">
+    <div style="border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h1 style="font-size: 20px; font-weight: bold; margin: 0; text-transform: uppercase; color: #111;">BPWindow - VIỆT NHÔM BP</h1>
+        <p style="margin: 2px 0 0; font-size: 13px;">Hotline kỹ thuật: <strong>0942 799 393</strong></p>
+      </div>
+      <div style="text-align: right;">
+        <h3 style="font-size: 16px; font-weight: bold; margin: 0; text-transform: uppercase;">PHIẾU RA PHÔI UỐN VÒM</h3>
+        <p style="margin: 2px 0 0; font-size: 12px;" id="p_date">Ngày tính: ...</p>
+      </div>
+    </div>
+
+    <!-- KHỐI THÔNG TIN DỰ ÁN TRÊN PHIẾU IN -->
+    <div style="background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px; padding: 8px 12px; margin-bottom: 12px; font-size: 13px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+        <div><strong>Công trình / Khách hàng:</strong> <span id="p_customer">---</span></div>
+        <div><strong>Vị trí cửa / Mã hiệu:</strong> <span id="p_door">---</span></div>
+        <div style="grid-column: span 2;"><strong>Hệ nhôm / Quy cách:</strong> <span id="p_profile">---</span></div>
+      </div>
+    </div>
+
+    <!-- BẢNG THÔNG SỐ VÀ HÌNH ẢNH ĐỒNG BỘ NẰM CẠNH NHAU TRÊN BẢN IN -->
+    <div style="display: grid; grid-template-columns: 55% 45%; gap: 15px; margin-bottom: 12px; align-items: start;">
+      <div>
+        <h4 style="font-size: 13px; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 6px; font-weight: bold;">
+          Quy cách vòm: <span id="p_type" style="color: #0284c7;">...</span>
+        </h4>
+        <table style="width: 100%; border-collapse: collapse; font-size: 12.5px;">
+          <tbody id="p_table_body"></tbody>
+        </table>
+      </div>
+      <!-- KHU VỰC CHỨA HÌNH MINH HỌA IN SVG NỀN TRẮNG RÕ NÉT -->
+      <div style="border: 1px solid #94a3b8; border-radius: 6px; padding: 6px; background-color: #ffffff; text-align: center;">
+        <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; color: #475569; margin-bottom: 4px;">
+          Hình Ảnh Minh Họa Kỹ Thuật (CAD)
+        </div>
+        <div id="p_svg_container" style="width: 100%; height: 180px; display: flex; align-items: center; justify-content: center;"></div>
+      </div>
+    </div>
+
+    <!-- KHỐI PHÔI CẮT NỔI BẬT -->
+    <div style="border: 2px solid #000; padding: 8px 14px; margin-bottom: 12px; background-color: #fffbeb; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div style="font-size: 13px; font-weight: bold; text-transform: uppercase; color: #92400e;">TỔNG CHIỀU DÀI PHÔI NHÔM CẦN CẮT:</div>
+        <div style="font-size: 11px; color: #64748b;">(Đã bao gồm phần bù kẹp đầu máy uốn)</div>
+      </div>
+      <div style="font-size: 26px; font-weight: 900; color: #b45309;" id="p_phoi">... mm</div>
+    </div>
+
+    <div id="p_extra_guide" style="font-size: 11.5px; margin-bottom: 20px; line-height: 1.45; border-left: 3px solid #f59e0b; padding-left: 8px;"></div>
+
+    <div style="display: flex; justify-content: space-between; text-align: center; margin-top: 25px; font-size: 13px;">
+      <div style="width: 200px;">
+        <strong>Kỹ Thuật Ra Bản Vẽ</strong><br>
+        <span style="font-size: 11px; color: #666;">(Ký & ghi rõ họ tên)</span>
+      </div>
+      <div style="width: 200px;">
+        <strong>Thợ Xưởng / Cắt Phôi</strong><br>
+        <span style="font-size: 11px; color: #666;">(Ký & xác nhận)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    let activeTab = 1;
+    let lastResult1 = null;
+    let lastResult2 = null;
+
+    function switchTab(tabIndex) {
+      activeTab = tabIndex;
+      const mod1 = document.getElementById('module1');
+      const mod2 = document.getElementById('module2');
+      const btn1 = document.getElementById('btnMod1');
+      const btn2 = document.getElementById('btnMod2');
+
+      if (tabIndex === 1) {
+        mod1.classList.remove('hidden');
+        mod2.classList.add('hidden');
+        btn1.className = "flex items-center justify-center gap-2.5 py-3.5 px-5 rounded-xl font-bold uppercase tracking-wider text-sm transition-all border-2 shadow-lg bg-amber-500 text-slate-950 border-amber-400 shadow-amber-500/20";
+        btn2.className = "flex items-center justify-center gap-2.5 py-3.5 px-5 rounded-xl font-bold uppercase tracking-wider text-sm transition-all border-2 shadow-lg bg-slate-800/80 text-slate-300 border-slate-700 hover:border-slate-500 hover:text-white";
+        renderSvg1Init();
+      } else {
+        mod2.classList.remove('hidden');
+        mod1.classList.add('hidden');
+        btn2.className = "flex items-center justify-center gap-2.5 py-3.5 px-5 rounded-xl font-bold uppercase tracking-wider text-sm transition-all border-2 shadow-lg bg-amber-500 text-slate-950 border-amber-400 shadow-amber-500/20";
+        btn1.className = "flex items-center justify-center gap-2.5 py-3.5 px-5 rounded-xl font-bold uppercase tracking-wider text-sm transition-all border-2 shadow-lg bg-slate-800/80 text-slate-300 border-slate-700 hover:border-slate-500 hover:text-white";
+        renderSvg2Init();
+      }
+    }
+
+    function getProjectInfo() {
+      return {
+        customer: document.getElementById('proj_customer').value.trim() || "Chưa nhập",
+        door: document.getElementById('proj_door').value.trim() || "Chưa nhập",
+        profile: document.getElementById('proj_profile').value.trim() || "Theo tiêu chuẩn xưởng"
+      };
+    }
+
+    // ========================================================
+    // MODULE 1: UỐN VÒM CONG (ĐÃ XỬ LÝ H > L/2 TỰ ĐỘNG THÊM 2 CHÂN THẲNG)
+    // ========================================================
+    function calcModule1() {
+      const errBox = document.getElementById('err1');
+      const errMsg = document.getElementById('err1-msg');
+      errBox.classList.add('hidden');
+
+      const L = parseFloat(document.getElementById('m1_L').value);
+      const H = parseFloat(document.getElementById('m1_H').value);
+      let extra = parseFloat(document.getElementById('m1_extra').value);
+      if (isNaN(extra) || extra < 0) extra = 0;
+
+      if (isNaN(L) || L <= 0) {
+        showError(errBox, errMsg, "Vui lòng nhập chiều rộng dây cung AB (L) lớn hơn 0.");
+        return;
+      }
+      if (isNaN(H) || H <= 0) {
+        showError(errBox, errMsg, "Vui lòng nhập chiều cao vòm (H) lớn hơn 0.");
+        return;
+      }
+
+      let R = 0;
+      let S = 0;
+      let thetaDeg = 0;
+      let H_chan = 0;
+      let isOverSemi = false;
+
+      // KIỂM TRA ĐIỀU KIỆN H VÀ L/2
+      if (H > (L / 2)) {
+        // TRƯỜNG HỢP VÒM BÁN NGUYỆT 180 ĐỘ KÈM 2 ĐOẠN CHÂN THẲNG ĐỨNG
+        isOverSemi = true;
+        R = L / 2;
+        H_chan = H - R; // Đoạn cao dư uốn thẳng xuống hai bên
+        thetaDeg = 180;
+        const thetaRad = Math.PI;
+        S = Math.PI * R; // Cung bán nguyệt nửa đường tròn
+        const S_tong = S + (2 * H_chan); // Cung tròn + 2 đoạn chân thẳng
+        const phoi = S_tong + extra;
+
+        lastResult1 = {
+          mode: 'semi_straight',
+          L: Math.round(L),
+          H: Math.round(H),
+          R: Math.round(R),
+          H_chan: Math.round(H_chan),
+          thetaDeg: "180.00",
+          S: Math.round(S),
+          S_tong: Math.round(S_tong),
+          extra: Math.round(extra),
+          phoi: Math.round(phoi)
+        };
+
+        document.getElementById('m1_mode_tag').innerText = "Vòm Bán Nguyệt + Chân Thẳng";
+        document.getElementById('m1_mode_tag').className = "text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded border border-amber-500/40";
+        document.getElementById('m1_status_badge').innerText = `Vòm R=${Math.round(R)} + 2 Chân ${Math.round(H_chan)}mm`;
+        document.getElementById('m1_phoi_desc').innerText = "Cung S + 2 Chân thẳng + Bù kẹp phôi";
+
+        document.getElementById('m1_guide_text').innerHTML = `
+          <strong>Quy cách uốn vòm liền 2 chân thẳng (từ trái qua phải):</strong><br>
+          1. <strong>Chân trái uốn thẳng:</strong> ${lastResult1.H_chan} mm<br>
+          2. <strong>Cung uốn bán nguyệt (180&deg;, R = ${lastResult1.R}):</strong> ${lastResult1.S} mm<br>
+          3. <strong>Chân phải uốn thẳng:</strong> ${lastResult1.H_chan} mm<br>
+          <span class="text-amber-400 font-semibold">&rarr; Tổng thanh nhôm định hình: ${lastResult1.S_tong} mm | Cắt phôi dài: ${lastResult1.phoi} mm (+${lastResult1.extra} mm bù uốn).</span>
+        `;
+      } else {
+        // TRƯỜNG HỢP VÒM CONG ĐỀU THÔNG THƯỜNG (H <= L/2)
+        R = (Math.pow(L, 2) / (8 * H)) + (H / 2);
+        const sinVal = L / (2 * R);
+        const thetaRad = 2 * Math.asin(Math.min(1, sinVal));
+        thetaDeg = thetaRad * (180 / Math.PI);
+        S = R * thetaRad;
+        H_chan = 0;
+        const phoi = S + extra;
+
+        lastResult1 = {
+          mode: 'arc_only',
+          L: Math.round(L),
+          H: Math.round(H),
+          R: Math.round(R),
+          H_chan: 0,
+          thetaDeg: thetaDeg.toFixed(2),
+          S: Math.round(S),
+          S_tong: Math.round(S),
+          extra: Math.round(extra),
+          phoi: Math.round(phoi)
+        };
+
+        document.getElementById('m1_mode_tag').innerText = "Cung tròn đều R";
+        document.getElementById('m1_mode_tag').className = "text-xs bg-slate-700 text-slate-300 px-2 py-0.5 rounded";
+        document.getElementById('m1_status_badge').innerText = "Cung cong tròn đơn";
+        document.getElementById('m1_phoi_desc').innerText = "Chiều dài cung S + Bù kẹp phôi";
+
+        document.getElementById('m1_guide_text').innerHTML = `
+          <strong>Quy cách uốn cung tròn đều:</strong> Cung cong thành phẩm <strong>${lastResult1.S} mm</strong> (Bán kính khuôn uốn <strong>R = ${lastResult1.R} mm</strong>). Cắt phôi <strong>${lastResult1.phoi} mm</strong>.
+        `;
+      }
+
+      // Hiển thị giao diện kết quả
+      document.getElementById('m1_res_R').innerText = lastResult1.R.toLocaleString('vi-VN');
+      document.getElementById('m1_res_S').innerText = lastResult1.S.toLocaleString('vi-VN');
+      document.getElementById('m1_res_chan').innerText = lastResult1.H_chan.toLocaleString('vi-VN');
+      document.getElementById('m1_res_deg').innerText = lastResult1.thetaDeg;
+      document.getElementById('m1_res_phoi').innerText = lastResult1.phoi.toLocaleString('vi-VN');
+
+      // Vẽ hình SVG kỹ thuật
+      drawSvg1Proportional(L, H, lastResult1.R, lastResult1.H_chan, isOverSemi);
+    }
+
+    function resetModule1() {
+      document.getElementById('m1_L').value = '';
+      document.getElementById('m1_H').value = '';
+      document.getElementById('m1_extra').value = '300';
+      document.getElementById('m1_res_R').innerText = '---';
+      document.getElementById('m1_res_S').innerText = '---';
+      document.getElementById('m1_res_chan').innerText = '0';
+      document.getElementById('m1_res_deg').innerText = '---';
+      document.getElementById('m1_res_phoi').innerText = '---';
+      document.getElementById('m1_mode_tag').innerText = "Cung tròn R";
+      document.getElementById('m1_status_badge').innerText = "Sẵn sàng";
+      document.getElementById('m1_phoi_desc').innerText = "Bằng Chiều dài cung S + Bù phôi máy uốn";
+      document.getElementById('m1_guide_text').innerText = "Bấm TÍNH TOÁN để hiển thị quy cách ra phôi.";
+      document.getElementById('err1').classList.add('hidden');
+      lastResult1 = null;
+      renderSvg1Init();
+    }
+
+    // ========================================================
+    // THUẬT TOÁN VẼ SVG VÒM CONG MODULE 1 (CHUẨN TỶ LỆ H & L)
+    // ========================================================
+    function renderSvg1Init() {
+      const svg = document.getElementById('svg1');
+      svg.innerHTML = `
+        <text x="270" y="140" fill="#64748b" font-size="13" text-anchor="middle">
+          Nhập dây cung (L) và chiều cao (H) để hiển thị bản vẽ kỹ thuật chuẩn tỷ lệ
+        </text>
+      `;
+    }
+
+    function drawSvg1Proportional(L, H, R, H_chan, isOverSemi, isPrint = false) {
+      const targetSvg = isPrint ? document.getElementById('p_svg_container') : document.getElementById('svg1');
+      const strokeMain = isPrint ? '#0284c7' : '#38bdf8';
+      const strokeLine = isPrint ? '#d97706' : '#f59e0b';
+      const strokeDim = isPrint ? '#475569' : '#94a3b8';
+      const textColor = isPrint ? '#0f172a' : '#ffffff';
+
+      const svgW = 540;
+      const svgH = 280;
+      const availW = 380;
+      const availH = 180;
+
+      const scaleX = availW / L;
+      const scaleY = availH / H;
+      const scale = Math.min(scaleX, scaleY);
+
+      const drawL = L * scale;
+      const drawH = H * scale;
+      const drawR = R * scale;
+      const drawH_chan = H_chan * scale;
+
+      const xMid = svgW / 2;
+      const xA = xMid - drawL / 2;
+      const xB = xMid + drawL / 2;
+
+      const yApex = 35; // Đỉnh cao nhất
+      const yArcBase = yApex + (isOverSemi ? drawR : drawH); // Chân cung tròn
+      const yBottom = yApex + drawH; // Chân nền đáy
+
+      let shapePath = '';
+      let legLines = '';
+
+      if (isOverSemi) {
+        // VÒM BÁN NGUYỆT 180 ĐỘ + 2 CHÂN THẲNG ĐỨNG
+        shapePath = `
+          M ${xA.toFixed(1)} ${yBottom.toFixed(1)} 
+          L ${xA.toFixed(1)} ${yArcBase.toFixed(1)} 
+          A ${drawR.toFixed(1)} ${drawR.toFixed(1)} 0 0 1 ${xB.toFixed(1)} ${yArcBase.toFixed(1)} 
+          L ${xB.toFixed(1)} ${yBottom.toFixed(1)}
+        `;
+        legLines = `
+          <!-- Đường phân tách chân thẳng và vòm bán nguyệt -->
+          <line x1="${xA.toFixed(1)}" y1="${yArcBase.toFixed(1)}" x2="${xB.toFixed(1)}" y2="${yArcBase.toFixed(1)}" stroke="${strokeLine}" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="${xMid.toFixed(1)}" y="${(yArcBase - 6).toFixed(1)}" fill="${strokeLine}" font-size="11" font-weight="bold" text-anchor="middle">Đường kính vòm = ${Math.round(L)} mm</text>
+
+          <!-- Gióng chân thẳng 2 bên -->
+          <line x1="${(xA - 18).toFixed(1)}" y1="${yArcBase.toFixed(1)}" x2="${(xA - 18).toFixed(1)}" y2="${yBottom.toFixed(1)}" stroke="#ec4899" stroke-width="1.5" marker-start="url(#m1_arrow)" marker-end="url(#m1_arrow)"/>
+          <text x="${(xA - 24).toFixed(1)}" y="${((yArcBase + yBottom) / 2 + 4).toFixed(1)}" fill="#ec4899" font-size="11" font-weight="bold" text-anchor="end">Chân = ${Math.round(H_chan)} mm</text>
+        `;
+      } else {
+        // VÒM CONG ĐỀU CUNG TRÒN ĐƠN
+        shapePath = `M ${xA.toFixed(1)} ${yBottom.toFixed(1)} A ${drawR.toFixed(1)} ${drawR.toFixed(1)} 0 0 1 ${xB.toFixed(1)} ${yBottom.toFixed(1)}`;
+        legLines = `
+          <line x1="${xA.toFixed(1)}" y1="${yBottom.toFixed(1)}" x2="${xB.toFixed(1)}" y2="${yBottom.toFixed(1)}" stroke="${strokeLine}" stroke-width="1.5" stroke-dasharray="4,3"/>
+        `;
+      }
+
+      const svgContent = `
+        <svg class="w-full h-full" viewBox="0 0 540 280">
+          <defs>
+            <marker id="m1_arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="${strokeLine}"/>
+            </marker>
+          </defs>
+
+          ${legLines}
+
+          <!-- ĐƯỜNG UỐN NHÔM CHÍNH -->
+          <path d="${shapePath}" fill="none" stroke="${strokeMain}" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- CÁC ĐIỂM CHỐT -->
+          <circle cx="${xA.toFixed(1)}" cy="${yBottom.toFixed(1)}" r="4" fill="${strokeLine}"/>
+          <circle cx="${xB.toFixed(1)}" cy="${yBottom.toFixed(1)}" r="4" fill="${strokeLine}"/>
+          <circle cx="${xMid.toFixed(1)}" cy="${yApex.toFixed(1)}" r="4" fill="${strokeMain}"/>
+
+          <!-- ĐƯỜNG GIÓNG TỔNG CHIỀU CAO H -->
+          <line x1="${(xB + 24).toFixed(1)}" y1="${yApex.toFixed(1)}" x2="${(xB + 24).toFixed(1)}" y2="${yBottom.toFixed(1)}" stroke="#10b981" stroke-width="1.5" marker-start="url(#m1_arrow)" marker-end="url(#m1_arrow)"/>
+          <text x="${(xB + 32).toFixed(1)}" y="${((yApex + yBottom) / 2 + 4).toFixed(1)}" fill="#10b981" font-size="11" font-weight="bold">
+            H = ${Math.round(H)} mm
+          </text>
+
+          <!-- ĐƯỜNG GIÓNG DÂY CUNG L (AB) -->
+          <line x1="${xA.toFixed(1)}" y1="${(yBottom + 20).toFixed(1)}" x2="${xB.toFixed(1)}" y2="${(yBottom + 20).toFixed(1)}" stroke="${strokeDim}" stroke-width="1.5" marker-start="url(#m1_arrow)" marker-end="url(#m1_arrow)"/>
+          <text x="${xMid.toFixed(1)}" y="${(yBottom + 34).toFixed(1)}" fill="${strokeDim}" font-size="11.5" font-weight="bold" text-anchor="middle">
+            Chiều rộng L = ${Math.round(L)} mm
+          </text>
+
+          <!-- THÔNG SỐ VÒM TRÊN ĐỈNH -->
+          <text x="${xMid.toFixed(1)}" y="${(yApex - 12).toFixed(1)}" fill="${strokeMain}" font-size="12" font-weight="bold" text-anchor="middle">
+            Bán kính R = ${Math.round(R)} mm ${isOverSemi ? `(Vòm bán nguyệt 180° + 2 chân)` : `(Cung tròn đều)`}
+          </text>
+        </svg>
+      `;
+
+      if (isPrint) {
+        targetSvg.innerHTML = svgContent;
+      } else {
+        targetSvg.innerHTML = svgContent.replace('<svg class="w-full h-full" viewBox="0 0 540 280">', '').replace('</svg>', '');
+      }
+    }
+
+    // ==========================================
+    // MODULE 2: VÒM BO 2 VAI + ĐOẠN THẲNG Ở GIỮA
+    // ==========================================
+    function calcModule2() {
+      const errBox = document.getElementById('err2');
+      const errMsg = document.getElementById('err2-msg');
+      errBox.classList.add('hidden');
+
+      const W = parseFloat(document.getElementById('m2_W').value);
+      const R = parseFloat(document.getElementById('m2_R').value);
+      const H_tong = parseFloat(document.getElementById('m2_H_tong').value);
+      let extra = parseFloat(document.getElementById('m2_extra').value);
+      if (isNaN(extra) || extra < 0) extra = 0;
+
+      if (isNaN(W) || W <= 0) {
+        showError(errBox, errMsg, "Vui lòng nhập tổng chiều rộng (W) lớn hơn 0.");
+        return;
+      }
+      if (isNaN(R) || R <= 0) {
+        showError(errBox, errMsg, "Vui lòng nhập bán kính uốn góc vai (R) lớn hơn 0.");
+        return;
+      }
+      if (2 * R > W) {
+        showError(errBox, errMsg, `Bán kính R quá lớn! 2 bên vai (2 × ${R} = ${2 * R} mm) đã vượt quá chiều rộng cửa (W = ${W} mm).`);
+        return;
+      }
+      if (isNaN(H_tong) || H_tong <= 0) {
+        showError(errBox, errMsg, "Vui lòng nhập chiều cao H tính từ đỉnh vòm cây ngang lớn hơn 0.");
+        return;
+      }
+      if (H_tong < R) {
+        showError(errBox, errMsg, `Chiều cao từ đỉnh vòm (H = ${H_tong} mm) không thể nhỏ hơn bán kính uốn góc vai (R = ${R} mm).`);
+        return;
+      }
+
+      const C = W - (2 * R);
+      const H_chan = H_tong - R;
+      const S1 = (Math.PI * R) / 2;
+      const S_cong_2ben = 2 * S1;
+      const S_tong = (2 * H_chan) + S_cong_2ben + C;
+      const phoi = S_tong + extra;
+
+      lastResult2 = {
+        W: Math.round(W),
+        R: Math.round(R),
+        H_tong: Math.round(H_tong),
+        H_chan: Math.round(H_chan),
+        C: Math.round(C),
+        S1: Math.round(S1),
+        S_cong_2ben: Math.round(S_cong_2ben),
+        S_tong: Math.round(S_tong),
+        extra: Math.round(extra),
+        phoi: Math.round(phoi)
+      };
+
+      document.getElementById('m2_res_C').innerText = lastResult2.C.toLocaleString('vi-VN');
+      document.getElementById('m2_res_S1').innerText = lastResult2.S1.toLocaleString('vi-VN');
+      document.getElementById('m2_res_chan').innerText = lastResult2.H_chan.toLocaleString('vi-VN');
+      document.getElementById('m2_res_Stong').innerText = lastResult2.S_tong.toLocaleString('vi-VN');
+      document.getElementById('m2_res_phoi').innerText = lastResult2.phoi.toLocaleString('vi-VN');
+
+      const guideText = document.getElementById('m2_guide_text');
+      if (lastResult2.H_chan > 0) {
+        guideText.innerHTML = `
+          <strong>Thứ tự các mốc vạch dấu bút lông trên cây nhôm:</strong><br>
+          1. <strong>Đoạn chân trái thẳng:</strong> ${lastResult2.H_chan} mm (Tính từ mép cắt = H - R = ${lastResult2.H_tong} - ${lastResult2.R})<br>
+          2. <strong>Cung uốn góc vai trái (90&deg;):</strong> ${lastResult2.S1} mm<br>
+          3. <strong>Đoạn thẳng phẳng giữa đỉnh:</strong> ${lastResult2.C} mm<br>
+          4. <strong>Cung uốn góc vai phải (90&deg;):</strong> ${lastResult2.S1} mm<br>
+          5. <strong>Đoạn chân phải thẳng:</strong> ${lastResult2.H_chan} mm<br>
+          <span class="text-amber-400 font-semibold">&rarr; Tổng phôi cắt: ${lastResult2.phoi} mm (Đã gồm +${lastResult2.extra} mm bù đầu uốn).</span>
+        `;
+      } else {
+        guideText.innerHTML = `
+          <strong>Uốn cây vòm ngang rời (Chân = 0 mm):</strong><br>
+          1. <strong>Cung vai trái:</strong> ${lastResult2.S1} mm | 
+          2. <strong>Đoạn đỉnh ngang:</strong> ${lastResult2.C} mm | 
+          3. <strong>Cung vai phải:</strong> ${lastResult2.S1} mm<br>
+          <span class="text-amber-400 font-semibold">&rarr; Cắt phôi dài: ${lastResult2.phoi} mm (Đã gồm +${lastResult2.extra} mm kẹp phôi).</span>
+        `;
+      }
+
+      drawSvg2(W, R, H_tong, H_chan, C);
+    }
+
+    function resetModule2() {
+      document.getElementById('m2_W').value = '';
+      document.getElementById('m2_R').value = '';
+      document.getElementById('m2_H_tong').value = '';
+      document.getElementById('m2_extra').value = '300';
+      document.getElementById('m2_res_C').innerText = '---';
+      document.getElementById('m2_res_S1').innerText = '---';
+      document.getElementById('m2_res_chan').innerText = '---';
+      document.getElementById('m2_res_Stong').innerText = '---';
+      document.getElementById('m2_res_phoi').innerText = '---';
+      document.getElementById('m2_guide_text').innerHTML = 'Vui lòng bấm <strong>TÍNH TOÁN</strong> để hiển thị khoảng cách gạch dấu cho thợ xưởng.';
+      document.getElementById('err2').classList.add('hidden');
+      lastResult2 = null;
+      renderSvg2Init();
+    }
+
+    function renderSvg2Init() {
+      const svg = document.getElementById('svg2');
+      svg.innerHTML = `
+        <text x="250" y="150" fill="#64748b" font-size="13" text-anchor="middle">
+          Nhập chiều rộng (W), bán kính bo (R) và chiều cao (H) để xem mô phỏng cửa
+        </text>
+      `;
+    }
+
+    function drawSvg2(W, R, H_tong, H_chan, C, isPrint = false) {
+      const targetSvg = isPrint ? document.getElementById('p_svg_container') : document.getElementById('svg2');
+      const strokeMain = isPrint ? '#0284c7' : '#f59e0b';
+      const strokeDim = isPrint ? '#475569' : '#94a3b8';
+      const padX = 80;
+      const drawW = 340;
+      const xLeft = padX;
+      const xRight = padX + drawW;
+      
+      const yTop = 50;
+      const rVisual = Math.max(30, Math.min(85, (R / W) * drawW));
+      
+      let hVisual = 140;
+      if (H_chan === 0) {
+        hVisual = rVisual;
+      } else {
+        const ratio = (H_tong - R) / R;
+        hVisual = Math.min(190, Math.max(65, rVisual + ratio * 32));
+      }
+      const yBottom = yTop + hVisual;
+
+      const xCurveL = xLeft + rVisual;
+      const xCurveR = xRight - rVisual;
+
+      const svgContent = `
+        <svg class="w-full h-full" viewBox="0 0 500 290">
+          <defs>
+            <marker id="arrow2_${isPrint ? 'prt' : 'web'}" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="${strokeMain}"/>
+            </marker>
+          </defs>
+
+          <line x1="${xLeft - 25}" y1="${yBottom}" x2="${xRight + 25}" y2="${yBottom}" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+          <path d="
+            M ${xLeft} ${yBottom} 
+            L ${xLeft} ${yTop + rVisual} 
+            A ${rVisual} ${rVisual} 0 0 1 ${xCurveL} ${yTop} 
+            L ${xCurveR} ${yTop} 
+            A ${rVisual} ${rVisual} 0 0 1 ${xRight} ${yTop + rVisual} 
+            L ${xRight} ${yBottom}
+          " fill="none" stroke="${strokeMain}" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- Gióng kích thước ĐOẠN ĐỈNH PHẲNG C -->
+          <line x1="${xCurveL}" y1="${yTop - 12}" x2="${xCurveR}" y2="${yTop - 12}" stroke="#0284c7" stroke-width="1.5" marker-start="url(#arrow2_${isPrint ? 'prt' : 'web'})" marker-end="url(#arrow2_${isPrint ? 'prt' : 'web'})"/>
+          <text x="${(xCurveL + xCurveR) / 2}" y="${yTop - 18}" fill="#0284c7" font-size="11" font-weight="bold" text-anchor="middle">Đoạn phẳng C = ${Math.round(C)} mm</text>
+
+          <!-- Bo góc vai trái R -->
+          <circle cx="${xCurveL}" cy="${yTop + rVisual}" r="3" fill="#10b981"/>
+          <text x="${xLeft + 8}" y="${yTop + rVisual - 8}" fill="#10b981" font-size="11" font-weight="bold">R = ${Math.round(R)}</text>
+
+          <!-- Bo góc vai phải R -->
+          <circle cx="${xCurveR}" cy="${yTop + rVisual}" r="3" fill="#10b981"/>
+          <text x="${xRight - 45}" y="${yTop + rVisual - 8}" fill="#10b981" font-size="11" font-weight="bold">R = ${Math.round(R)}</text>
+
+          <!-- Gióng TỔNG CHIỀU RỘNG W -->
+          <line x1="${xLeft}" y1="${yBottom + 18}" x2="${xRight}" y2="${yBottom + 18}" stroke="${strokeDim}" stroke-width="1.5" marker-start="url(#arrow2_${isPrint ? 'prt' : 'web'})" marker-end="url(#arrow2_${isPrint ? 'prt' : 'web'})"/>
+          <text x="${(xLeft + xRight) / 2}" y="${yBottom + 32}" fill="${strokeDim}" font-size="11" font-weight="bold" text-anchor="middle">Tổng rộng W = ${Math.round(W)} mm</text>
+
+          <!-- Gióng CHIỀU CAO TÍNH TỪ ĐỈNH VÒM CÂY NGANG (H) -->
+          <line x1="${xRight + 20}" y1="${yTop}" x2="${xRight + 20}" y2="${yBottom}" stroke="#ec4899" stroke-width="1.5" marker-start="url(#arrow2_${isPrint ? 'prt' : 'web'})" marker-end="url(#arrow2_${isPrint ? 'prt' : 'web'})"/>
+          <text x="${xRight + 26}" y="${(yTop + yBottom) / 2 + 4}" fill="#ec4899" font-size="11" font-weight="bold">
+            H = ${Math.round(H_tong)} mm
+          </text>
+
+          <!-- Gióng đoạn chân thẳng đứng (H - R) -->
+          ${H_chan > 0 ? `
+            <line x1="${xLeft - 18}" y1="${yTop + rVisual}" x2="${xLeft - 18}" y2="${yBottom}" stroke="#0284c7" stroke-width="1.5" marker-start="url(#arrow2_${isPrint ? 'prt' : 'web'})" marker-end="url(#arrow2_${isPrint ? 'prt' : 'web'})"/>
+            <text x="${xLeft - 24}" y="${(yTop + rVisual + yBottom) / 2 + 4}" fill="#0284c7" font-size="10" font-weight="bold" text-anchor="end">
+              Chân = ${Math.round(H_chan)} mm
+            </text>
+          ` : ''}
+        </svg>
+      `;
+
+      if (isPrint) {
+        targetSvg.innerHTML = svgContent;
+      } else {
+        targetSvg.innerHTML = svgContent.replace('<svg class="w-full h-full" viewBox="0 0 500 290">', '').replace('</svg>', '');
+      }
+    }
+
+    function showError(box, msgEl, message) {
+      msgEl.innerText = message;
+      box.classList.remove('hidden');
+    }
+
+    // ==========================================
+    // SAO CHÉP KẾT QUẢ CHO ZALO
+    // ==========================================
+    function copyResult(mod) {
+      const proj = getProjectInfo();
+      let text = "";
+      if (mod === 1) {
+        if (!lastResult1) {
+          alert("Vui lòng bấm TÍNH TOÁN trước khi sao chép!");
+          return;
+        }
+        text = `*BPWINDOW - VIỆT NHÔM BP*\n` +
+               `Hotline: 0942 799 393\n` +
+               `------------------------------\n` +
+               `*THÔNG TIN CÔNG TRÌNH:*\n` +
+               `- Khách hàng/Công trình: ${proj.customer}\n` +
+               `- Vị trí cửa/Mã: ${proj.door}\n` +
+               `- Hệ nhôm: ${proj.profile}\n` +
+               `------------------------------\n` +
+               `*KẾT QUẢ UỐN VÒM:*\n` +
+               `- Dây cung AB (L): ${lastResult1.L} mm\n` +
+               `- Chiều cao vòm (H): ${lastResult1.H} mm\n` +
+               `- Bán kính uốn (R): ${lastResult1.R} mm\n` +
+               `- Cung cong S: ${lastResult1.S} mm\n` +
+               `- Đoạn chân uốn thẳng xuống: ${lastResult1.H_chan} mm\n` +
+               `- Bù phôi kẹp máy: ${lastResult1.extra} mm\n` +
+               `=> *PHÔI CẮT CHUẨN BỊ: ${lastResult1.phoi} mm*`;
+      } else {
+        if (!lastResult2) {
+          alert("Vui lòng bấm TÍNH TOÁN trước khi sao chép!");
+          return;
+        }
+        text = `*BPWINDOW - VIỆT NHÔM BP*\n` +
+               `Hotline: 0942 799 393\n` +
+               `------------------------------\n` +
+               `*THÔNG TIN CÔNG TRÌNH:*\n` +
+               `- Khách hàng/Công trình: ${proj.customer}\n` +
+               `- Vị trí cửa/Mã: ${proj.door}\n` +
+               `- Hệ nhôm: ${proj.profile}\n` +
+               `------------------------------\n` +
+               `*VÒM BO 2 VAI + ĐOẠN THẲNG:*\n` +
+               `- Chiều rộng (W): ${lastResult2.W} mm\n` +
+               `- Bán kính bo góc (R): ${lastResult2.R} mm\n` +
+               `- Chiều cao từ đỉnh vòm (H): ${lastResult2.H_tong} mm\n` +
+               `- Đoạn chân đứng (H - R): ${lastResult2.H_chan} mm\n` +
+               `- Đoạn thẳng đỉnh (C): ${lastResult2.C} mm\n` +
+               `- Chiều dài 1 góc bo: ${lastResult2.S1} mm\n` +
+               `- Bù phôi kẹp máy: ${lastResult2.extra} mm\n` +
+               `=> *PHÔI CẮT CHUẨN BỊ: ${lastResult2.phoi} mm*`;
+      }
+
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Đã sao chép đầy đủ thông tin công trình và thông số uốn vòm! Bạn có thể dán (Ctrl+V) gửi Zalo ngay.");
+      }).catch(() => {
+        alert("Không thể tự động sao chép. Vui lòng thử lại.");
+      });
+    }
+
+    // ==========================================
+    // IN PHIẾU GIA CÔNG KÈM HÌNH MINH HỌA
+    // ==========================================
+    function printBill(mod) {
+      const now = new Date();
+      const dateStr = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')} ngày ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+      document.getElementById('p_date').innerText = "Ngày tính: " + dateStr;
+
+      const proj = getProjectInfo();
+      document.getElementById('p_customer').innerText = proj.customer;
+      document.getElementById('p_door').innerText = proj.door;
+      document.getElementById('p_profile').innerText = proj.profile;
+
+      const typeEl = document.getElementById('p_type');
+      const tableBody = document.getElementById('p_table_body');
+      const phoiEl = document.getElementById('p_phoi');
+      const guideEl = document.getElementById('p_extra_guide');
+
+      if (mod === 1) {
+        if (!lastResult1) {
+          alert("Vui lòng bấm TÍNH TOÁN trước khi in phiếu!");
+          return;
+        }
+
+        const isSemi = lastResult1.mode === 'semi_straight';
+        typeEl.innerText = isSemi ? "VÒM BÁN NGUYỆT + 2 CHÂN THẲNG" : "UỐN CUNG TRÒN ĐỀU";
+        phoiEl.innerText = lastResult1.phoi.toLocaleString('vi-VN') + " mm";
+        tableBody.innerHTML = `
+          <tr style="border-bottom: 1px solid #eee;"><td style="padding: 4px 0;">Chiều rộng dây cung AB (L):</td><td style="text-align: right; font-weight: bold;">${lastResult1.L} mm</td></tr>
+          <tr style="border-bottom: 1px solid #eee;"><td style="padding: 4px 0;">Chiều cao vòm (H):</td><td style="text-align: right; font-weight: bold;">${lastResult1.H} mm</td></tr>
+          <tr style="border-bottom: 1px solid #eee;"><td style="padding: 4px 0;">Bán kính uốn (R):</td><td style="text-align: right; font-weight: bold; color: #d97706;">${lastResult1.R} mm</td></tr>
+          <tr style="border-bottom: 1px solid #eee;"><td style="padding: 4px 0;">Chiều dài cung cong S:</td><td style="text-align: right; font-weight: bold; color: #059669;">${lastResult1.S} mm</td></tr>
+          <tr style="border-bottom: 1px solid #eee;"><td style="padding: 4px 0;">Đoạn chân thẳng uốn xuống:</td><td style="text-align: right; font-weight: bold; color: #0284c7;">${lastResult1.H_chan} mm</td></tr>
+          <tr style="border-bottom: 1px solid #eee;"><td style="padding: 4px 0;">Tổng chiều dài định hình:</td><td style="text-align: right; font-weight: bold;">${lastResult1.S_tong} mm</td></tr>
+          <tr><td style="padding: 4px 0;">Phần bù kẹp đầu máy uốn:</td><td style="text-align: right; font-weight: bold;">+${lastResult1.extra} mm</td></tr>
+        `;
+
+        if (isSemi) {
+          guideEl.innerHTML = `
+            <strong>Mốc vạch dấu bút lông gia công trên cây nhôm:</strong><br>
+            Chân trái: <strong>${lastResult1.H_chan} mm</strong> &rarr; Cung bán nguyệt uốn cong (180°, R=${lastResult1.R}): <strong>${lastResult1.S} mm</strong> &rarr; Chân phải: <strong>${lastResult1.H_chan} mm</strong>.
+          `;
+        } else {
+          guideEl.innerHTML = `
+            * <strong>Yêu cầu thợ xưởng:</strong> Sử dụng khuôn uốn bán kính <strong>R = ${lastResult1.R} mm</strong>. Chiều dài cung uốn hoàn thiện đạt <strong>${lastResult1.S} mm</strong>.
+          `;
+        }
+
+        // TẠO HÌNH SVG MINH HỌA XUẤT TRÊN PHIẾU IN
+        drawSvg1Proportional(lastResult1.L, lastResult1.H, lastResult1.R, lastResult1.H_chan, isSemi, true);
+
+      } else {
+        if (!lastResult2) {
+          alert("Vui lòng bấm TÍNH TOÁN trước khi in phiếu!");
+          return;
+        }
+        typeEl.innerText = "VÒM BO 2 VAI + ĐOẠN THẲNG Ở GIỮA (2 GÓC 90°)";
+        phoiEl.innerText = lastResult2.phoi.toLocaleString('vi-VN') + " mm";
+        tableBody.innerHTML = `
+          <tr style="border-bottom: 1px solid #eee;"><td style="padding: 4px 0;">Tổng chiều rộng khung (W):</td><td style="text-align: right; font-weight: bold;">${lastResult2.W} mm</td></tr>
+          <tr style="border-bottom: 1px solid #eee;"><td style="padding: 4px 0;">Bán kính bo vai (R):</td><td style="text-align: right; font-weight: bold; color: #d97706;">${lastResult2.R} mm</td></tr>
+          <tr style="border-bottom: 1px solid #eee;"><td style="padding: 4px 0;">Chiều cao tính từ đỉnh vòm (H):</td><td style="text-align: right; font-weight: bold;">${lastResult2.H_tong} mm</td></tr>
+          <tr style="border-bottom: 1px solid #eee;"><td style="padding: 4px 0;">Đoạn chân đứng (H - R):</td><td style="text-align: right; font-weight: bold;">${lastResult2.H_chan} mm</td></tr>
+          <tr style="border-bottom: 1px solid #eee;"><td style="padding: 4px 0;">Đoạn thẳng phẳng đỉnh giữa (C):</td><td style="text-align: right; font-weight: bold;">${lastResult2.C} mm</td></tr>
+          <tr style="border-bottom: 1px solid #eee;"><td style="padding: 4px 0;">1 Góc bo uốn 90°:</td><td style="text-align: right; font-weight: bold;">${lastResult2.S1} mm</td></tr>
+          <tr><td style="padding: 4px 0;">Phần bù kẹp đầu máy uốn:</td><td style="text-align: right; font-weight: bold;">+${lastResult2.extra} mm</td></tr>
+        `;
+        guideEl.innerHTML = `
+          <strong>Khoảng cách gạch dấu bút lông gia công trên cây nhôm:</strong><br>
+          Chân trái: <strong>${lastResult2.H_chan} mm</strong> &rarr; Góc bo 1 (90°): <strong>${lastResult2.S1} mm</strong> &rarr; Đỉnh thẳng: <strong>${lastResult2.C} mm</strong> &rarr; Góc bo 2 (90°): <strong>${lastResult2.S1} mm</strong> &rarr; Chân phải: <strong>${lastResult2.H_chan} mm</strong>.
+        `;
+
+        // TẠO HÌNH SVG MINH HỌA XUẤT TRÊN PHIẾU IN
+        drawSvg2(lastResult2.W, lastResult2.R, lastResult2.H_tong, lastResult2.H_chan, lastResult2.C, true);
+      }
+
+      window.print();
+    }
+
+    window.onload = function() {
+      renderSvg1Init();
+    };
+  </script>
+</body>
+</html>
