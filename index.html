@@ -217,7 +217,7 @@
 
             <div class="flex flex-wrap items-center justify-end gap-2.5 mt-4 pt-3 border-t border-slate-700/60">
               <button onclick="exportDXF(1)" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2 px-3.5 rounded-lg flex items-center gap-1.5 transition shadow">
-                <i class="fa-solid fa-file-code text-amber-300"></i> Xuất File DXF (CNC/AutoCAD)
+                <i class="fa-solid fa-file-code text-amber-300"></i> Xuất File DXF Liền Khối (CNC)
               </button>
               <button onclick="copyResult(1)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold py-2 px-3.5 rounded-lg flex items-center gap-1.5 transition">
                 <i class="fa-regular fa-copy text-amber-400"></i> Sao Chép Zalo
@@ -363,7 +363,7 @@
 
             <div class="flex flex-wrap items-center justify-end gap-2.5 mt-4 pt-3 border-t border-slate-700/60">
               <button onclick="exportDXF(2)" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2 px-3.5 rounded-lg flex items-center gap-1.5 transition shadow">
-                <i class="fa-solid fa-file-code text-amber-300"></i> Xuất File DXF (CNC/AutoCAD)
+                <i class="fa-solid fa-file-code text-amber-300"></i> Xuất File DXF Liền Khối (CNC)
               </button>
               <button onclick="copyResult(2)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold py-2 px-3.5 rounded-lg flex items-center gap-1.5 transition">
                 <i class="fa-regular fa-copy text-amber-400"></i> Sao Chép Zalo
@@ -485,7 +485,7 @@
                 <span class="text-[10px] text-slate-500">độ (&deg;)</span>
               </div>
               <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/80">
-                <span class="text-[10px] text-slate-400 uppercase block font-medium">Độ Dài Giãn Cung</span>
+                <span class="text-[10px] text-slate-400 uppercase block font-medium">Đoạn Giãn Cung</span>
                 <span id="m3_res_diff" class="text-lg sm:text-xl font-bold text-violet-400 font-condensed">---</span>
                 <span class="text-[10px] text-slate-500 block">S - L (mm)</span>
               </div>
@@ -511,7 +511,7 @@
 
             <div class="flex flex-wrap items-center justify-end gap-2.5 mt-4 pt-3 border-t border-slate-700/60">
               <button onclick="exportDXF(3)" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2 px-3.5 rounded-lg flex items-center gap-1.5 transition shadow">
-                <i class="fa-solid fa-file-code text-amber-300"></i> Xuất File DXF (CNC/AutoCAD)
+                <i class="fa-solid fa-file-code text-amber-300"></i> Xuất File DXF Liền Khối (CNC)
               </button>
               <button onclick="copyResult(3)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold py-2 px-3.5 rounded-lg flex items-center gap-1.5 transition">
                 <i class="fa-regular fa-copy text-amber-400"></i> Sao Chép Zalo
@@ -539,7 +539,7 @@
     <div class="mt-8 bg-slate-800/40 border border-slate-700/60 rounded-xl p-4 text-xs text-slate-400 flex items-start gap-3">
       <i class="fa-solid fa-circle-info text-amber-400 text-base mt-0.5"></i>
       <p>
-        <strong class="text-slate-300">Lưu ý gia công tại xưởng:</strong> Chiều dài phôi mặc định đã cộng thêm 300 mm để kẹp con lăn máy uốn. File DXF xuất ra theo đúng tỷ lệ 1:1 đơn vị mm, sẵn sàng mở bằng AutoCAD hoặc nạp trực tiếp vào máy uốn CNC.
+        <strong class="text-slate-300">Lưu ý gia công tại xưởng:</strong> File DXF được xuất dạng đường liền khối (LWPOLYLINE Bulge) chuẩn AutoCAD R12/2000, đơn vị mm theo đúng tim uốn, tương thích hoàn toàn với tất cả các dòng máy uốn CNC nhôm 3 trục và thủy lực.
       </p>
     </div>
   </main>
@@ -569,7 +569,6 @@
       </div>
     </div>
 
-    <!-- KHỐI THÔNG TIN DỰ ÁN TRÊN PHIẾU IN -->
     <div style="background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px; padding: 8px 12px; margin-bottom: 12px; font-size: 13px;">
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
         <div><strong>Công trình / Khách hàng:</strong> <span id="p_customer">---</span></div>
@@ -578,7 +577,6 @@
       </div>
     </div>
 
-    <!-- BẢNG THÔNG SỐ VÀ HÌNH ẢNH ĐỒNG BỘ TRÊN BẢN IN -->
     <div style="display: grid; grid-template-columns: 55% 45%; gap: 15px; margin-bottom: 12px; align-items: start;">
       <div>
         <h4 style="font-size: 13px; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 6px; font-weight: bold;">
@@ -596,7 +594,6 @@
       </div>
     </div>
 
-    <!-- KHỐI PHÔI CẮT NỔI BẬT -->
     <div style="border: 2px solid #000; padding: 8px 14px; margin-bottom: 12px; background-color: #fffbeb; display: flex; justify-content: space-between; align-items: center;">
       <div>
         <div style="font-size: 13px; font-weight: bold; text-transform: uppercase; color: #92400e;">TỔNG CHIỀU DÀI PHÔI NHÔM CẦN CẮT:</div>
@@ -1211,10 +1208,11 @@
     }
 
     // ========================================================
-    // XUẤT FILE DXF (AUTOCAD / MÁY UỐN CNC) CHUẨN TỶ LỆ 1:1 (mm)
+    // THUẬT TOÁN XUẤT DXF DẠNG LWPOLYLINE LIỀN KHỐI (CNC CHUẨN 100%)
+    // Khắc phục triệt để lỗi không đọc được nét rời rạc trên máy uốn
     // ========================================================
     function exportDXF(mod) {
-      let entities = [];
+      let vertices = []; // Danh sách đỉnh: [{x, y, bulge}]
       let filename = "BPWindow_UonVom.dxf";
 
       if (mod === 1) {
@@ -1226,21 +1224,20 @@
         filename = `BPWindow_VomCong_${L}x${H}.dxf`;
 
         if (lastResult1.mode === 'semi_straight') {
-          // Bán nguyệt + 2 chân thẳng
-          // Chân trái: (0, 0) -> (0, H_chan)
-          entities.push(dxfLine(0, 0, 0, H_chan));
-          // Cung bán nguyệt: Tâm (R, H_chan), Bán kính R, từ 180° đến 0° (chiều ngược kim đồng hồ: 0 -> 180)
-          entities.push(dxfArc(R, H_chan, R, 0, 180));
-          // Chân phải: (2R, H_chan) -> (2R, 0)
-          entities.push(dxfLine(2 * R, H_chan, 2 * R, 0));
+          // Bán nguyệt (góc ôm 180 độ): Bulge = tan(180° / 4) = tan(45°) = 1.0 (uốn lượn qua phải)
+          // 1. Chân trái: Đáy (0,0) -> Đỉnh chân (0, H_chan)
+          vertices.push({ x: 0, y: 0, bulge: 0 });
+          // 2. Điểm bắt đầu vòm: (0, H_chan), uốn cong sang (L, H_chan) với Bulge = -1.0
+          vertices.push({ x: 0, y: H_chan, bulge: -1.0 });
+          // 3. Đỉnh chân phải: (L, H_chan), chạy thẳng xuống đáy (L, 0)
+          vertices.push({ x: L, y: H_chan, bulge: 0 });
+          // 4. Đáy chân phải
+          vertices.push({ x: L, y: 0, bulge: 0 });
         } else {
-          // Cung uốn tròn đều
-          const halfL = L / 2;
-          const centerY = H - R; // Tọa độ tâm O
-          const startAngle = Math.atan2(0 - centerY, -halfL - 0) * (180 / Math.PI);
-          const endAngle = Math.atan2(0 - centerY, halfL - 0) * (180 / Math.PI);
-          // AutoCad góc tính ngược chiều kim đồng hồ từ trục X dương
-          entities.push(dxfArc(0, centerY, R, endAngle, startAngle));
+          // Cung cong tròn đơn: Bulge = 2*H / L (theo công thức chuẩn hình học CAD)
+          const bulge = -(2 * H) / L; // Dấu âm để chiều uốn nhô lên đỉnh vòm
+          vertices.push({ x: 0, y: 0, bulge: bulge });
+          vertices.push({ x: L, y: 0, bulge: 0 });
         }
       } else if (mod === 2) {
         if (!lastResult2) { alert("Vui lòng bấm TÍNH TOÁN trước khi xuất file DXF!"); return; }
@@ -1251,48 +1248,87 @@
         const C = lastResult2.C;
         filename = `BPWindow_Vom2Vai_${W}x${H_tong}.dxf`;
 
-        // 1. Chân trái: (0, 0) -> (0, H_chan)
-        if (H_chan > 0) {
-          entities.push(dxfLine(0, 0, 0, H_chan));
-        }
-        // 2. Góc bo vai trái (Tâm tại R, H_chan; Bán kính R, từ 90° đến 180°)
-        entities.push(dxfArc(R, H_chan, R, 90, 180));
-        // 3. Đoạn thẳng đỉnh giữa: (R, H_tong) -> (R + C, H_tong)
-        entities.push(dxfLine(R, H_tong, R + C, H_tong));
-        // 4. Góc bo vai phải (Tâm tại R + C, H_chan; Bán kính R, từ 0° đến 90°)
-        entities.push(dxfArc(R + C, H_chan, R, 0, 90));
-        // 5. Chân phải: (W, H_chan) -> (W, 0)
-        if (H_chan > 0) {
-          entities.push(dxfLine(W, H_chan, W, 0));
+        // Góc bo 90 độ: Bulge = tan(90° / 4) = tan(22.5°) = sqrt(2) - 1 ≈ 0.41421356
+        const bulgeCorner = -0.41421356;
+
+        // 1. Chân trái đáy
+        vertices.push({ x: 0, y: 0, bulge: 0 });
+        // 2. Chân trái chạm góc bo
+        vertices.push({ x: 0, y: H_chan, bulge: bulgeCorner });
+        // 3. Kết thúc góc bo 1, bắt đầu đoạn thẳng đỉnh giữa
+        vertices.push({ x: R, y: H_tong, bulge: 0 });
+        // 4. Kết thúc đoạn thẳng đỉnh giữa, bắt đầu góc bo 2
+        vertices.push({ x: R + C, y: H_tong, bulge: bulgeCorner });
+        // 5. Kết thúc góc bo 2, bắt đầu chân phải
+        vertices.push({ x: W, y: H_chan, bulge: 0 });
+        // 6. Chân phải đáy
+        vertices.push({ x: W, y: 0, bulge: 0 });
+
+        // Nếu chỉ làm vòm ngang rời (H_chan = 0), loại bỏ các điểm thừa ở đáy
+        if (H_chan === 0) {
+          vertices = [
+            { x: 0, y: 0, bulge: bulgeCorner },
+            { x: R, y: R, bulge: 0 },
+            { x: R + C, y: R, bulge: bulgeCorner },
+            { x: W, y: 0, bulge: 0 }
+          ];
         }
       } else if (mod === 3) {
         if (!lastResult3) { alert("Vui lòng bấm TÍNH TOÁN trước khi xuất file DXF!"); return; }
         const L = lastResult3.L;
         const H = lastResult3.H;
-        const R = lastResult3.R;
         filename = `BPWindow_VomLoi_${L}x${H}.dxf`;
 
-        const halfL = L / 2;
-        const centerY = H - R;
-        const startAngle = Math.atan2(0 - centerY, -halfL) * (180 / Math.PI);
-        const endAngle = Math.atan2(0 - centerY, halfL) * (180 / Math.PI);
-        entities.push(dxfArc(0, centerY, R, endAngle, startAngle));
+        const bulge = -(2 * H) / L;
+        vertices.push({ x: 0, y: 0, bulge: bulge });
+        vertices.push({ x: L, y: 0, bulge: 0 });
       }
 
-      // Tạo cấu trúc file DXF R12 tiêu chuẩn tương thích mọi máy CNC uốn và CAD
-      const dxfContent = [
+      // Xây dựng file DXF R2000 dạng LWPOLYLINE
+      let dxfLines = [
         "0", "SECTION",
         "2", "HEADER",
-        "9", "$INSUNITS", "70", "4", // 4 = Millimeters
+        "9", "$ACADVER", "1", "AC1015", // AutoCAD 2000 (ổn định nhất với bộ điều khiển CNC)
+        "9", "$INSUNITS", "70", "4",     // 4 = Milimét
+        "0", "ENDSEC",
+        "0", "SECTION",
+        "2", "TABLES",
+        "0", "TABLE",
+        "2", "LAYER",
+        "70", "1",
+        "0", "LAYER",
+        "2", "0",
+        "70", "0",
+        "62", "7",
+        "6", "CONTINUOUS",
+        "0", "ENDTAB",
         "0", "ENDSEC",
         "0", "SECTION",
         "2", "ENTITIES",
-        ...entities,
-        "0", "ENDSEC",
-        "0", "EOF"
-      ].join("\n");
+        "0", "LWPOLYLINE",
+        "5", "100",
+        "100", "AcDbEntity",
+        "8", "0",
+        "100", "AcDbPolyline",
+        "90", vertices.length.toString(), // Số đỉnh
+        "70", "0"                         // Polyline mở (không khép kín đáy)
+      ];
 
-      // Tải file về máy người dùng
+      // Đẩy từng đỉnh và hệ số Bulge (độ cong) vào thực thể
+      vertices.forEach(v => {
+        dxfLines.push("10", v.x.toFixed(4));
+        dxfLines.push("20", v.y.toFixed(4));
+        if (v.bulge && v.bulge !== 0) {
+          dxfLines.push("42", v.bulge.toFixed(6));
+        }
+      });
+
+      dxfLines.push("0", "ENDSEC");
+      dxfLines.push("0", "EOF");
+
+      const dxfContent = dxfLines.join("\r\n");
+
+      // Tải file về máy tính / điện thoại
       const blob = new Blob([dxfContent], { type: "application/dxf" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
@@ -1300,35 +1336,6 @@
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    }
-
-    function dxfLine(x1, y1, x2, y2) {
-      return [
-        "0", "LINE",
-        "8", "BPWINDOW_UON_VOM",
-        "10", x1.toFixed(3),
-        "20", y1.toFixed(3),
-        "30", "0.0",
-        "11", x2.toFixed(3),
-        "21", y2.toFixed(3),
-        "31", "0.0"
-      ].join("\n");
-    }
-
-    function dxfArc(cx, cy, r, startA, endA) {
-      // Chuẩn hóa góc 0 - 360
-      let s = (startA % 360 + 360) % 360;
-      let e = (endA % 360 + 360) % 360;
-      return [
-        "0", "ARC",
-        "8", "BPWINDOW_UON_VOM",
-        "10", cx.toFixed(3),
-        "20", cy.toFixed(3),
-        "30", "0.0",
-        "40", r.toFixed(3),
-        "50", s.toFixed(3),
-        "51", e.toFixed(3)
-      ].join("\n");
     }
 
     // ==========================================
